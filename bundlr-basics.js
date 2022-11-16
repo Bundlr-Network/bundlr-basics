@@ -69,6 +69,16 @@ console.log(`AFTER FUNDING node balance (atomic units) = ${atomicBalance}`);
 convertedBalance = bundlr.utils.unitConverter(atomicBalance);
 console.log(`AFTER FUNDING node balance (converted) = ${convertedBalance}`);
 
+// Upload data
+// If it can be reduced to 1s and 0s, you can store it via Bundlr.
+const dataToUpload = "Hello world ... where the llamas at?";
+try {
+	let response = await bundlr.upload(dataToUpload); // Returns an axios response
+	console.log(`Data uploaded ==> https://arweave.net/${response.id}`);
+} catch (e) {
+	console.log("Error uploading file ", e);
+}
+
 // Upload a file
 // Practice uploading with this lovely llama, or use any file you own.
 // You've got 1MG of data paid for, so choose whatever you want.
@@ -83,15 +93,15 @@ try {
 
 // Upload an entire folder
 // More llamas for you to upload ... or change to your own files
-// Upload some NFTs, your vacation photos or your band's latest album
+// Upload some NFTs, your vacation photos or your band's latest album.
 const folderToUpload = "llama_folder";
 try {
 	let response = await bundlr.uploadFolder("./" + folderToUpload, {
-		indexFile: "./optionalIndex.html", // optional index file (file the user will load when accessing the manifest)
+		indexFile: "", // optional index file (file the user will load when accessing the manifest)
 		batchSize: 50, //number of items to upload at once
 		keepDeleted: false, // whether to keep now deleted items from previous uploads
 	}); //returns the manifest ID
-	console.log(response);
+
 	console.log(`Files uploaded ==> https://arweave.net/${response.id}`);
 } catch (e) {
 	console.log("Error uploading file ", e);
