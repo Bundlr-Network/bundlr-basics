@@ -1,13 +1,14 @@
 import Bundlr from "@bundlr-network/client";
 import fs from "fs";
 
+/**************************************** SETUP *********************************************/
 // Change this line to match the name of the wallet key file
 // you downloaded from https://faucet.arweave.net/.
 // Physically move your key file from the download directory to the
 // project directory that holds this JS file.
-const walletAddress = "arweave-key-aOTcToJZnW6wQQE6fKSFCta7etFX5Gy8KjJ_B-GsS14.json";
+const publicPrivateKey = "arweave-key-aOTcToJZnW6wQQE6fKSFCta7etFX5Gy8KjJ_B-GsS14.json";
 
-const jwk = JSON.parse(fs.readFileSync(walletAddress).toString());
+const jwk = JSON.parse(fs.readFileSync(publicPrivateKey).toString());
 
 // NOTE: Depending on the version of JavaScript you use, you may need to use
 // the commented out line below to create a new Bundlr object.
@@ -17,6 +18,7 @@ const bundlr = new Bundlr.default("http://node1.bundlr.network", "arweave", jwk)
 // Print your wallet address
 console.log(`wallet address = ${bundlr.address}`);
 
+/**************************** CHECK UPLOAD PRICE *********************************************/
 // Check the price to upload 1MG of data
 // The function accepts a number of bytes, so to check the price of
 // 1MG, you'll need to check the price of 1,048,576 bytes.
@@ -29,14 +31,16 @@ const price1MGAtomic = await bundlr.getPrice(dataSizeToCheck);
 const price1MGConverted = bundlr.utils.unitConverter(price1MGAtomic);
 console.log(`Uploading 1MG to Bundlr costs $${price1MGConverted}`);
 
+/********************************** CHECK LOADED BALANCE ****************************************/
 // Get loaded balance in atomic units
 let atomicBalance = await bundlr.getLoadedBalance();
-console.log(`node balance (atomic units) = ${atomicBalance}`);
+console.log(`Node balance (atomic units) = ${atomicBalance}`);
 
 // Convert balance to an easier to read format
 let convertedBalance = bundlr.utils.unitConverter(atomicBalance);
-console.log(`node balance (converted) = ${convertedBalance}`);
+console.log(`Node balance (converted) = ${convertedBalance}`);
 
+/********************************** LAZY FUNDING A NODE ******************************************/
 // If the balance funded (atomicBalance) is less than the cost
 // to upload 1MG (price1MGAtomic), then go ahead and fund your wallet
 // NOTE: Some chains are faster or slower than others. It can take
@@ -60,16 +64,29 @@ if (atomicBalance < price1MGAtomic) {
 	}
 }
 
-// Check wallet balance (post fund)
-// Get loaded balance in atomic units
-atomicBalance = await bundlr.getLoadedBalance();
-console.log(`AFTER FUNDING node balance (atomic units) = ${atomicBalance}`);
+/********************************** WITHDAWING FUNDS FROM A NODE ****************************************/
+try {
+	// 400 - something went wrong
+	// response.data  = "Not enough balance for requested withdrawal"
 
-// Convert balance to an easier to read format
-convertedBalance = bundlr.utils.unitConverter(atomicBalance);
-console.log(`AFTER FUNDING node balance (converted) = ${convertedBalance}`);
+	// 200 - Ok
+	// response.data = {
+	//     requested, // the requested amount,
+	//     fee,       // the reward required by the network (network fee)
+	//     final,     // total cost to your account (requested + fee)
+	//     tx_id,     // the ID of the withdrawal transaction
+	// }
+	// 1. Get current balance
+	let curBalance = await bundlr.getLoadedBalance();
+	// 2. Withdraw all
+	let response = await bundlr.withdrawBalance(curBalance);
 
-// Upload data
+	console.log(`Funds withdrawn txID=${response.data.tx_id} amount requested=${response.data.requested}`);
+} catch (e) {
+	console.log("Error funding node ", e);
+}
+
+/********************************** UPLOAD DATA ****************************************/
 // If it can be reduced to 1s and 0s, you can store it via Bundlr.
 const dataToUpload = "Hello world ... where the llamas at?";
 try {
@@ -79,7 +96,7 @@ try {
 	console.log("Error uploading file ", e);
 }
 
-// Upload a file
+/********************************** UPLOAD A FILE ****************************************/
 // Practice uploading with this lovely llama, or use any file you own.
 // You've got 1MG of data paid for, so choose whatever you want.
 // BUT ... REMEMBER ... You CAN'T DELETE THE FILE ONCE UPLOADED, SO BE CAREFUL! :)
@@ -91,7 +108,7 @@ try {
 	console.log("Error uploading file ", e);
 }
 
-// Upload an entire folder
+/********************************** UPLOAD A FOLDER ****************************************/
 // More llamas for you to upload ... or change to your own files
 // Upload some NFTs, your vacation photos or your band's latest album.
 const folderToUpload = "llama_folder";
