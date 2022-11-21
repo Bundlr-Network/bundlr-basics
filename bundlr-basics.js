@@ -10,7 +10,7 @@ const publicPrivateKey = "arweave-key-aOTcToJZnW6wQQE6fKSFCta7etFX5Gy8KjJ_B-GsS1
 
 const jwk = JSON.parse(fs.readFileSync(publicPrivateKey).toString());
 
-// NOTE: Depending on the version of JavaScript you use, you may need to use
+// NOTE: Depending on the version of JavaScript / TypeScript you use, you may need to use
 // the commented out line below to create a new Bundlr object.
 // const bundlr = new Bundlr("http://node1.bundlr.network", "arweave", jwk);
 const bundlr = new Bundlr.default("http://node1.bundlr.network", "arweave", jwk);
