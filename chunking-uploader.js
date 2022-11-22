@@ -1,10 +1,10 @@
 // cSpell:words Bundlr WebBundlr
 /**
- * The chunked uploader is a fault tolerant, resumable, stream based signer/uploader.
+ * The chunking uploader is a fault tolerant, resumable, stream based signer/uploader.
  * It allows you to pause / resume uploads, and to do things like
  * create progress bars to show upload progress.
  *
- * The chunked uploader is supported both with Bundlr / NodeJS on the server
+ * The chunking uploader is supported both with Bundlr / NodeJS on the server
  * and with WebBundlr in the browser. This code shows how to use it with
  * the standard Bundlr / NodeJS combination.
  *
@@ -23,10 +23,10 @@ import Bundlr from "@bundlr-network/client";
 import fs from "fs";
 
 /**************************************** SETUP *********************************************/
-// Change this line to match the name of the wallet key file
-const publicPrivateKey = "";
+// Change the following line to match the name of the wallet key file
+const privateKey = "";
 
-const jwk = JSON.parse(fs.readFileSync(publicPrivateKey).toString());
+const jwk = JSON.parse(fs.readFileSync(privateKey).toString());
 
 // First create a Bundlr object
 // NOTE: Depending on the version of JavaScript / TypeScript you use, you may need to use
@@ -35,13 +35,15 @@ const jwk = JSON.parse(fs.readFileSync(publicPrivateKey).toString());
 const bundlr = new Bundlr.default("http://node1.bundlr.network", "arweave", jwk);
 
 // Now get a reference to the chunked uploader
+// If you're doing more than one upload, you will need to refresh this
+// object reference for each upload.
 let uploader = bundlr.uploader.chunkedUploader;
 
 // Optionally change the batch size (default is 5)
-// uploader.setBatchSize(10);
+uploader.setBatchSize(10);
 
 // Optionally change the chunk size (default is 25MB)
-// uploader.setChunkSize(50);
+uploader.setChunkSize(50);
 
 /******************************** DATA MODE *********************************************/
 // The uploader has two modes of operation, data mode and transaction mode.
@@ -90,7 +92,7 @@ uploader.resume(); // resumes the upload
 console.log("Upload resumed");
 
 // You can call await at ANY TIME to ensure the upload has completed
-// response = await upload;
+response = await upload;
 console.log(`Pause / Resume mode uploaded ==> https://arweave.net/${response.data.id}`);
 
 // Paused uploads will expire after a period of inactivity.
@@ -109,7 +111,7 @@ await uploader.uploadTransaction(dataItem); // upload as normal
 // 3. done:        Emitted when the upload completes.
 uploader.on("chunkUpload", (chunkInfo) => {
 	console.log(
-		`Uploaded Chunk number ${chunkInfo.id}, offset of ${chunkInfo.offset}, size ${chunkInfo.size} Bytes, with a total of ${chunkInfo.totalUploaded} bytes uploaded.`,
+		`Uploaded Chunk number ${chunkInfo.id}, offset o f ${chunkInfo.offset}, size ${chunkInfo.size} Bytes, with a total of ${chunkInfo.totalUploaded} bytes uploaded.`,
 	);
 });
 
