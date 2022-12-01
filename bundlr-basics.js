@@ -7,7 +7,7 @@ import fs from "fs";
 // Physically move your key file from the download directory to the
 // project directory that holds this JS file.
 // You can also use any private key from a supported wallet.
-const privateKey = "arweave-key-aOTcToJZnW6wQQE6fKSFCta7etFX5Gy8KjJ_B-GsS14.json";
+const privateKey = "";
 
 const jwk = JSON.parse(fs.readFileSync(privateKey).toString());
 
