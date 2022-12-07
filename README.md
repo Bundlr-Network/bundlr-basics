@@ -1,6 +1,6 @@
 # Bundler Basics
 
-Code repository to accompany [Bundlr SDK docs](https://staging.docs.bundlr.network/docs/overview) and this [tutorial on using Bundlr with NodeJS.](https://staging.docs.bundlr.network/docs/tutorials/bundlr-nodejs).
+Code repository to accompany [Bundlr SDK docs](https://staging.docs.bundlr.network/docs/overview) and this [tutorial on using Bundlr with NodeJS.](https://staging.docs.bundlr.network/docs/tutorials/bundlr-nodejs)
 
 ## Installation
 
