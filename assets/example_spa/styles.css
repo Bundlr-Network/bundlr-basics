@@ -1,0 +1,25 @@
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+body {
+	background-color: #82a8a1;
+}
+h1 {
+	background-color: #82a8a1;
+	font-size: 35px;
+}
+img {
+	margin-bottom: 2px;
+	width: 150px;
+	height: 150px;
+}
+#branding {
+	padding: 10px;
+}
+#llama_grid {
+	padding: 10px;
+	display: flex;
+	gap: 10px;
+}

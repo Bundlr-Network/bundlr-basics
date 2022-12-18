@@ -33,6 +33,9 @@ A NodeJS script showing how to use our [Chunked Uploader](https://staging.docs.b
 -   Resuming a paused upload
 -   Registering event callbacks
 
+`scripts/spa-uploader.js`
+A NodeJS script showing how to use `uploadFolder` to upload an entire website to Arweave via Bundlr.
+
 ## Assets
 
 The scripts are designed to pull images and data from the assets folder when running. Sample assets are provided to make testing easier, feel free to change to anything you want.
