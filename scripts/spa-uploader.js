@@ -46,10 +46,13 @@ const connectToNode = async () => {
  */
 const uploadSPA = async (bundlr) => {
 	try {
+		// Call upload folder.
+		// You MUST pass the name of your main index file as the indexFile parameter
 		const response = await bundlr.uploadFolder("../assets/example_spa/", {
-			indexFile: "index.html", // optional index file (file the user will load when accessing the manifest)
-		}); //returns the manifest ID
+			indexFile: "index.html",
+		});
 
+		// This URL will now load your entire website from the permaweb
 		console.log(`SPA Uploaded https://arweave.net/${response.id}`);
 	} catch (e) {
 		console.log("Error uploading file ", e);
